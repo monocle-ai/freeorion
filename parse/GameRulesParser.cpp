@@ -6,7 +6,7 @@
 #include "../util/GameRules.h"
 
 #include <boost/spirit/include/phoenix.hpp>
-
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 
@@ -231,7 +231,13 @@ namespace parse {
     GameRules game_rules(const boost::filesystem::path& path) {
         GameRules game_rules;
         const lexer lexer;
-        /*auto success =*/ detail::parse_file<grammar, GameRules>(lexer, path, game_rules);
+
+        boost::timer::cpu_timer cpu_timer;
+
+        detail::parse_file<grammar, GameRules>(lexer, path, game_rules);
+
+        DebugLogger() << "GameRules Parse time: " << cpu_timer.format();
+
         return game_rules;
     }
 }

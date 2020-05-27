@@ -10,6 +10,7 @@
 #include "../util/Directories.h"
 
 #include <boost/spirit/include/phoenix.hpp>
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 
@@ -127,7 +128,13 @@ namespace parse {
     start_rule_payload monster_fleet_plans(const boost::filesystem::path& path) {
         const lexer lexer;
         start_rule_payload monster_fleet_plans_;
-        /*auto success =*/ detail::parse_file<grammar, start_rule_payload>(lexer, path, monster_fleet_plans_);
+
+        boost::timer::cpu_timer cpu_timer;
+
+        detail::parse_file<grammar, start_rule_payload>(lexer, path, monster_fleet_plans_);
+
+        DebugLogger() << "MonsterFleetPlans Parse time: " << cpu_timer.format();
+
         return monster_fleet_plans_;
     }
 }

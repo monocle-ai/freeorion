@@ -8,7 +8,7 @@
 #include "../util/Directories.h"
 
 #include <boost/spirit/include/phoenix.hpp>
-
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 #if DEBUG_PARSERS
@@ -97,6 +97,8 @@ namespace parse {
         const lexer lexer;
         start_rule_payload all_stats;
 
+        boost::timer::cpu_timer cpu_timer;
+
         for (const auto& file : ListDir(path, IsFOCScript)) {
             start_rule_payload stats_;
             if (/*auto success =*/ detail::parse_file<grammar, start_rule_payload>(lexer, file, stats_)) {
@@ -109,6 +111,8 @@ namespace parse {
                 }
             }
         }
+
+        DebugLogger() << "EmpireStats Parse time: " << cpu_timer.format();
 
         return all_stats;
     }

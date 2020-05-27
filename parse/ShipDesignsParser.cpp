@@ -11,7 +11,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/lexical_cast.hpp>
-
+#include <boost/timer/timer.hpp>
 
 FO_COMMON_API extern const int ALL_EMPIRES;
 
@@ -228,8 +228,7 @@ namespace parse {
         std::vector<boost::uuids::uuid> ordering;
 
         boost::filesystem::path manifest_file;
-
-        ScopedTimer timer("Ship Designs Parsing", true);
+        boost::timer::cpu_timer cpu_timer;
 
         for (const auto& file : ListDir(path, IsFOCScript)) {
             TraceLogger() << "Parse ship design file " << file.filename();
@@ -252,9 +251,11 @@ namespace parse {
             }
         }
 
+        DebugLogger() << "ShipDesigns Parse time: " << cpu_timer.format();
+
         if (!manifest_file.empty()) {
             try {
-                /*auto success =*/ detail::parse_file<manifest_grammar, std::vector<boost::uuids::uuid>>(
+                detail::parse_file<manifest_grammar, std::vector<boost::uuids::uuid>>(
                     lexer, manifest_file, ordering);
 
             } catch (const std::runtime_error& e) {

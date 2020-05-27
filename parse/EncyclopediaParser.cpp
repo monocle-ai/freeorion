@@ -6,7 +6,7 @@
 #include "../util/Directories.h"
 
 #include <boost/spirit/include/phoenix.hpp>
-
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 
@@ -88,10 +88,12 @@ namespace parse {
         const lexer lexer;
         ArticleMap articles;
 
-        ScopedTimer timer("Encyclopedia Parsing", true);
+        boost::timer::cpu_timer cpu_timer;
 
         for (const auto& file : ListDir(path, IsFOCScript))
             detail::parse_file<grammar, ArticleMap>(lexer, file, articles);
+
+        DebugLogger() << "Encyclopedia Parse time: " << cpu_timer.format();
 
         return articles;
     }

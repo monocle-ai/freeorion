@@ -8,7 +8,7 @@
 #include "../util/Directories.h"
 
 #include <boost/spirit/include/phoenix.hpp>
-
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 

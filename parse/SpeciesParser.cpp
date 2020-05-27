@@ -14,7 +14,7 @@
 #include "../util/Directories.h"
 
 #include <boost/spirit/include/phoenix.hpp>
-
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 
@@ -288,17 +288,18 @@ namespace parse {
         start_rule_payload::second_type ordering;
 
         boost::filesystem::path manifest_file;
-
-        ScopedTimer timer("Species Parsing", true);
+        boost::timer::cpu_timer cpu_timer;
 
         for (const auto& file : ListDir(path, IsFOCScript)) {
-            if (file.filename() == "SpeciesCensusOrdering.focs.txt" ) {
+            if (file.filename() == "SpeciesCensusOrdering.focs.txt") {
                 manifest_file = file;
                 continue;
             }
 
             detail::parse_file<grammar, start_rule_payload::first_type>(lexer, file, species_);
         }
+
+        DebugLogger() << "Species Parse time: " << cpu_timer.format();
 
         if (!manifest_file.empty()) {
             try {
@@ -311,6 +312,6 @@ namespace parse {
             }
         }
 
-        return {std::move(species_), ordering};
+        return {std::move(species_), std::move(ordering)};
     }
 }

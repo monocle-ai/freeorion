@@ -12,6 +12,8 @@
 #include "../universe/ValueRef.h"
 #include "../util/Directories.h"
 
+#include <boost/timer/timer.hpp>
+
 
 #define DEBUG_PARSERS 0
 
@@ -122,10 +124,12 @@ namespace parse {
         const lexer lexer;
         start_rule_payload building_types;
 
-        ScopedTimer timer("Buildings Parsing", true);
+        boost::timer::cpu_timer cpu_timer;
 
         for (const auto& file : ListDir(path, IsFOCScript))
             detail::parse_file<grammar, start_rule_payload>(lexer, file, building_types);
+
+        DebugLogger() << "Buildings Parse time: " << cpu_timer.format();
 
         return building_types;
     }

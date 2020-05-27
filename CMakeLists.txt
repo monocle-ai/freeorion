@@ -235,6 +235,7 @@ find_package(Boost ${MINIMUM_BOOST_VERSION}
         serialization
         system
         thread
+        timer
     REQUIRED)
 
 find_package(Boost COMPONENTS python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR} REQUIRED)

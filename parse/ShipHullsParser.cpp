@@ -15,7 +15,7 @@
 #include "../util/Directories.h"
 
 #include <boost/spirit/include/phoenix.hpp>
-
+#include <boost/timer/timer.hpp>
 
 #define DEBUG_PARSERS 0
 
@@ -169,8 +169,12 @@ namespace parse {
         const lexer lexer;
         start_rule_payload hulls;
 
+        boost::timer::cpu_timer cpu_timer;
+
         for (const auto& file : ListDir(path, IsFOCScript))
-            /*auto success =*/ detail::parse_file<grammar, start_rule_payload>(lexer, file, hulls);
+            detail::parse_file<grammar, start_rule_payload>(lexer, file, hulls);
+
+        DebugLogger() << "ShipHulls Parse time: " << cpu_timer.format();
 
         return hulls;
     }

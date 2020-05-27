@@ -15,6 +15,7 @@
 
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/spirit/include/qi_as.hpp>
+#include <boost/timer/timer.hpp>
 
 
 #define DEBUG_PARSERS 0
@@ -240,12 +241,14 @@ namespace parse {
         g_categories_seen = &categories_seen;
         g_categories = &categories;
 
-        ScopedTimer timer("Techs Parsing", true);
+        boost::timer::cpu_timer cpu_timer;
 
         detail::parse_file<grammar, TechManager::TechContainer>(lexer, path / "Categories.inf", techs_);
 
         for (const auto& file : ListDir(path, IsFOCScript))
             detail::parse_file<grammar, TechManager::TechContainer>(lexer, file, techs_);
+
+        DebugLogger() << "Techs Parse time: " << cpu_timer.format();
 
         return std::make_tuple(std::move(techs_), std::move(categories), categories_seen);
     }
