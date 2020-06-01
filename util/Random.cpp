@@ -20,6 +20,11 @@ void ClockSeed() {
     gen.seed(static_cast<boost::mt19937::result_type>(diff.total_milliseconds()));
 }
 
+GeneratorType& RandomGenerator() {
+    boost::mutex::scoped_lock lock(s_prng_mutex);
+    return gen;
+}
+
 SmallIntDistType SmallIntDist(int min, int max) {
     boost::mutex::scoped_lock lock(s_prng_mutex);
     return SmallIntDistType(gen, boost::uniform_smallint<>(min, max));
@@ -41,7 +46,7 @@ GaussianDistType GaussianDist(double mean, double sigma) {
 }
 
 int RandSmallInt(int min, int max)
-{ return (min == max ? min : SmallIntDist(min,max)()); }
+{ return (min == max ? min : SmallIntDist(min, max)()); }
 
 int RandInt(int min, int max)
 { return (min == max ? min : IntDist(min, max)()); }

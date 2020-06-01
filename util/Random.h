@@ -40,23 +40,26 @@ typedef boost::variate_generator<GeneratorType&, boost::normal_distribution<>>  
 /** seeds the underlying random number generator used to drive all random number distributions */
 FO_COMMON_API void Seed(unsigned int seed);
 
-/** seeds the underlying random number generator used to drive all random number distributions with 
+/** seeds the underlying random number generator used to drive all random number distributions with
     the current clock time */
 FO_COMMON_API void ClockSeed();
+
+/** returns the underlying random number generator */
+FO_COMMON_API GeneratorType& RandomGenerator();
 
 /** returns a functor that provides a uniform distribution of small
     integers in the range [\a min, \a max]; if the integers desired
     are larger than 10000, use IntDist() instead */
 FO_COMMON_API SmallIntDistType SmallIntDist(int min, int max);
 
-/** returns a functor that provides a uniform distribution of integers in the range [\a min, \a max]; 
+/** returns a functor that provides a uniform distribution of integers in the range [\a min, \a max];
     if the integers desired are smaller than 10000, SmallIntDist() may be used instead */
 IntDistType IntDist(int min, int max);
 
 /** returns a functor that provides a uniform distribution of doubles in the range [\a min, \a max) */
 FO_COMMON_API DoubleDistType DoubleDist(double min, double max);
 
-/** returns a functor that provides a Gaussian (normal) distribution of doubles centered around \a mean, 
+/** returns a functor that provides a Gaussian (normal) distribution of doubles centered around \a mean,
     with standard deviation \a sigma */
 FO_COMMON_API GaussianDistType GaussianDist(double mean, double sigma);
 
@@ -64,7 +67,7 @@ FO_COMMON_API GaussianDistType GaussianDist(double mean, double sigma);
     if the integers desired are larger than 10000, use RandInt() instead */
 FO_COMMON_API int RandSmallInt(int min, int max);
 
-/** returns an int from a uniform distribution of integers in the range [\a min, \a max]; 
+/** returns an int from a uniform distribution of integers in the range [\a min, \a max];
     if the integers desired are smaller than 10000, RandSmallInt() may be used instead */
 FO_COMMON_API int RandInt(int min, int max);
 
@@ -74,7 +77,7 @@ FO_COMMON_API double RandZeroToOne();
 /** returns a double from a uniform distribution of doubles in the range [\a min, \a max) */
 FO_COMMON_API double RandDouble(double min, double max);
 
-/** returns a double from a Gaussian (normal) distribution of doubles centered around \a mean, 
+/** returns a double from a Gaussian (normal) distribution of doubles centered around \a mean,
     with standard deviation \a sigma */
 FO_COMMON_API double RandGaussian(double mean, double sigma);
 
